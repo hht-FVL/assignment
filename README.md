@@ -31,6 +31,7 @@ AI生成的问题：
 4. 修改完成后，重新运行程序，功能正常，所有准考证文件都能正确生成。
 
 4. 人工代码审查
+   
 @staticmethod
 def check_student_id_format(student_id):
     #判断输入的学号是否为纯数字
