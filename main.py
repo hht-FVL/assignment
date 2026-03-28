@@ -64,3 +64,25 @@ class ExamSystem:
                 return
         # 遍历完成未匹配到，给出提示
         print(f"未找到学号为{target_id}的学生信息，请核对学号后重试")        
+
+    def random_roll_call(self, input_count):
+        # 异常处理：输入非数字的转换异常
+        try:
+            roll_count = int(input_count.strip())
+        except ValueError:
+            print("输入错误：点名数量必须为有效整数，请重新输入")
+            return
+
+        if roll_count < 1:
+            print("输入错误：点名数量不能小于1")
+            return
+        if roll_count > self.total_student:
+            print(f"输入错误：点名数量不能超过总人数{self.total_student}")
+            return
+        
+        # 从学生列表中随机抽取不重复的指定数量学生
+        roll_students = random.sample(self.student_list, roll_count)
+        print(f"\n===== 随机点名结果（共{roll_count}人）=====")
+        for index, student in enumerate(roll_students, start=1):
+            print(f"{index}. 学号：{student.student_id}  姓名：{student.name}")
+        print("==========================================\n")
