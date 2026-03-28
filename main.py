@@ -86,3 +86,26 @@ class ExamSystem:
         for index, student in enumerate(roll_students, start=1):
             print(f"{index}. 学号：{student.student_id}  姓名：{student.name}")
         print("==========================================\n")
+        # 生成考场安排表核心方法
+    def generate_exam_seat_plan(self):
+        shuffled_students = self.student_list.copy()
+        random.shuffle(shuffled_students)
+        generate_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        # 定义输出文件路径，根目录下的「考场安排表.txt」
+        output_file = "考场安排表.txt"
+
+        try:
+            with open(output_file, 'w', encoding='utf-8') as f:
+                f.write(f"生成时间：{generate_time}\n")
+                f.write("考场座位号\t姓名\t学号\n")
+                # 遍历打乱后的学生，写入座位信息，座位号从1开始
+                for seat_num, student in enumerate(shuffled_students, start=1):
+                    f.write(f"{seat_num}\t{student.name}\t{student.student_id}\n")
+            print(f"考场安排表生成成功！文件路径：{os.path.abspath(output_file)}")
+            self.seat_plan = shuffled_students
+        
+        # 处理文件被占用、无权限的异常
+        except PermissionError:
+            print("错误：没有文件写入权限，请关闭已打开的「考场安排表.txt」后重试")
+        except Exception as e:
+            print(f"考场安排表生成失败：{str(e)}")    
