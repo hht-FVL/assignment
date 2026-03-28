@@ -45,3 +45,22 @@ class ExamSystem:
         # 处理其他未知异常
         except Exception as e:
             print(f"文件读取失败，发生未知错误：{str(e)}")
+    @staticmethod
+    def check_student_id_format(student_id):
+        # 判断输入的学号是否为数字
+       return student_id.strip().isdigit()
+
+    # 按学号查找学生信息的核心方法
+    def search_student_by_id(self, input_id):
+        if not self.check_student_id_format(input_id):
+            print("输入错误：学号必须为纯数字，请重新输入")
+            return
+  
+        target_id = input_id.strip()
+        # 遍历所有学生对象，匹配学号
+        for student in self.student_list:
+            if student.student_id == target_id:
+                print(student)
+                return
+        # 遍历完成未匹配到，给出提示
+        print(f"未找到学号为{target_id}的学生信息，请核对学号后重试")        
