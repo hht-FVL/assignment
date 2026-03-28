@@ -143,4 +143,39 @@ class ExamSystem:
                 continue
         print(f"所有准考证生成完成！共生成{len(self.seat_plan)}个准考证文件") 
 
-        
+if __name__ == "__main__":
+    STUDENT_FILE = "人工智能编程语言学生名单.txt"
+    exam_system = ExamSystem(STUDENT_FILE)
+    if exam_system.total_student == 0:
+        print("学生数据加载失败，程序退出")
+        exit()
+
+    # 控制台交互菜单，循环执行直到用户选择退出
+    while True:
+        # 打印功能菜单
+        print("\n===== 学生信息与考场管理系统 =====")
+        print("1. 按学号查询学生信息")
+        print("2. 随机点名")
+        print("3. 生成考场安排表")
+        print("4. 批量生成准考证文件")
+        print("0. 退出系统")
+        print("===================================")
+        # 获取用户输入的功能编号
+        choice = input("请输入您要执行的功能编号：").strip()
+
+        # 根据用户选择执行对应功能
+        if choice == "1":
+            input_id = input("请输入要查询的学生学号：")
+            exam_system.search_student_by_id(input_id)
+        elif choice == "2":
+            input_count = input("请输入要点名的学生数量：")
+            exam_system.random_roll_call(input_count)
+        elif choice == "3":
+            exam_system.generate_exam_seat_plan()
+        elif choice == "4":
+            exam_system.generate_exam_tickets()
+        elif choice == "0":
+            print("感谢使用，程序退出")
+            break
+        else:
+            print("输入错误，请输入0-4之间的有效功能编号")
