@@ -108,4 +108,39 @@ class ExamSystem:
         except PermissionError:
             print("错误：没有文件写入权限，请关闭已打开的「考场安排表.txt」后重试")
         except Exception as e:
-            print(f"考场安排表生成失败：{str(e)}")    
+            print(f"考场安排表生成失败：{str(e)}")   
+
+    def generate_exam_tickets(self):
+        if not hasattr(self, 'seat_plan') or len(self.seat_plan) == 0:
+            print("未找到考场安排信息，正在自动生成考场安排表...")
+            self.generate_exam_seat_plan()
+        
+        ticket_dir = "准考证"
+        # 异常处理：捕获文件夹创建失败的异常
+        try:
+            # 创建文件夹，exist_ok=True表示文件夹已存在时不报错
+            os.makedirs(ticket_dir, exist_ok=True)
+            print(f"准考证文件夹创建成功，路径：{os.path.abspath(ticket_dir)}")
+        except Exception as e:
+            print(f"准考证文件夹创建失败：{str(e)}")
+            return
+        
+        # 遍历考场安排，逐个生成准考证文件
+        for seat_num, student in enumerate(self.seat_plan, start=1):
+            # 生成文件名，座位号不足两位自动补0
+            file_name = f"{seat_num:02d}.txt"
+            # 拼接文件完整路径
+            file_path = os.path.join(ticket_dir, file_name)
+
+            # 异常处理：捕获单个文件写入异常，避免单个失败导致整体中断
+            try:
+                with open(file_path, 'w', encoding='utf-8') as f:
+                    f.write(f"考场座位号：{seat_num}\n")
+                    f.write(f"姓名：{student.name}\n")
+                    f.write(f"学号：{student.student_id}\n")
+            except Exception as e:
+                print(f"座位号{seat_num}的准考证生成失败：{str(e)}")
+                continue
+        print(f"所有准考证生成完成！共生成{len(self.seat_plan)}个准考证文件") 
+
+        
